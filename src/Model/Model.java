@@ -1,37 +1,36 @@
 package Model;
 import View.*;
-
 import java.util.Arrays;
+
 
 public class Model {
     int width;
     int height;
+
+    Point[] points = {new Point(7,7), new Point(7,8), new Point(7,6), new Point(8,7), new Point(8,8), new Point(10,8), new Point(11,8)};
     public Model(int width, int height) {
     this.width = width;
     this.height = height;
     }
 
-    public void update(Point[] points) {
+    public void update() {
         for (int i = 0; i<points.length; i++) {
-            getGrannar(points);
+            System.out.println(points[i] + " has " + getGrannar(points, points[i]) + " grannar");
+            if(getGrannar(points, points[i]) < 2 || getGrannar(points, points[i]) > 3) {
+                Arrays.toString(points);
+                points = removeTheElement(points, i);
+                i--;
+            }
         }
     }
 
-    public int getGrannar(Point[] points) {
+    public int getGrannar(Point[] points, Point point) {
         int grannar = -1;
 
-        for (int x = 0; x<points.length; x++) {
         for (int i = 0; i<points.length; i++) {
-            if (points[x].getX() - points[i].getX() <= 1 && points[x].getX() - points[i].getX() >= -1 && points[x].getY() - points[i].getY() <= 1 && points[x].getY() - points[i].getY() >= -1) {
+            if (point.getX() - points[i].getX() <= 1 && point.getX() - points[i].getX() >= -1 && point.getY() - points[i].getY() <= 1 && point.getY() - points[i].getY() >= -1) {
                 grannar++;
             }
-        }
-            System.out.println(x+1 + " has " + grannar + " grannar");
-        if(grannar < 2 || grannar > 3) {
-            System.out.println(points[x] + " should be dead");
-            // remove that bih
-        }
-        grannar = -1;
         }
         return grannar;
     }
@@ -60,13 +59,44 @@ public class Model {
     }
 
     public Point[] getPoints() {
-        Point[] points = {new Point(7,7), new Point(7,8), new Point(8,8), new Point(10,8), new Point(11,8)};
 
         return points;
     }
     public Shape[] getShapes() {
-        Point[] points = {new Point(7,7), new Point(7,8), new Point(8,8), new Point(10,8), new Point(11,8)};
+        points = getPoints();
 
         return (Shape[])points;
     }
+
+    // Function to remove the element
+    public static Point[] removeTheElement(Point[] arr, int index)
+    {
+
+        // If the array is empty
+        // or the index is not in array range
+        // return the original array
+        if (arr == null
+                || index < 0
+                || index >= arr.length) {
+
+            return arr;
+        }
+
+        // Create another array of size one less
+        Point[] anotherArray = new Point[arr.length - 1];
+
+        // Copy the elements from starting till index
+        // from original array to the other array
+        System.arraycopy(arr, 0, anotherArray, 0, index);
+
+        // Copy the elements from index + 1 till end
+        // from original array to the other array
+        System.arraycopy(arr, index + 1,
+                anotherArray, index,
+                arr.length - index - 1);
+
+        // return the resultant array
+        return anotherArray;
+    }
+
 }
