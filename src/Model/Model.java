@@ -7,20 +7,34 @@ public class Model {
     int width;
     int height;
 
-    Point[] points = {new Point(7,7), new Point(7,8), new Point(7,6), new Point(8,7), new Point(8,8), new Point(10,8), new Point(11,8)};
+    Point[] points = {new Point(7,7), new Point(7,8), new Point(7,6), new Point(8,7), new Point(8,8), new Point(10,8), new Point(11,8), new Point(13,8), new Point(13,7), new Point(14,8)};
     public Model(int width, int height) {
     this.width = width;
     this.height = height;
     }
 
     public void update() {
+        int die = 0;
         for (int i = 0; i<points.length; i++) {
-            System.out.println(points[i] + " has " + getGrannar(points, points[i]) + " grannar");
-            if(getGrannar(points, points[i]) < 2 || getGrannar(points, points[i]) > 3) {
-                Arrays.toString(points);
-                points = removeTheElement(points, i);
-                i--;
+            if (getGrannar(points, points[i]) < 2 || getGrannar(points, points[i]) > 3) {
+                die++;
             }
+        }
+        int deaths = 0;
+        int removed = 0;
+        int[] dying = new int[die];
+        for (int i = 0; i<points.length; i++) {
+            //System.out.println(points[i] + " has " + getGrannar(points, points[i]) + " grannar");
+            if(getGrannar(points, points[i]) < 2 || getGrannar(points, points[i]) > 3) {
+                dying[deaths] = i;
+                deaths++;
+            }
+        }
+        System.out.println(Arrays.toString(dying));
+        for (int i = 0; i<dying.length; i++) {
+            Arrays.toString(points);
+            points = removeTheElement(points, dying[i]-removed);
+            removed++;
         }
     }
 
