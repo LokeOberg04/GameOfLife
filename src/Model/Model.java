@@ -36,6 +36,7 @@ public class Model {
             points = removeTheElement(points, dying[i]-removed);
             removed++;
         }
+        points = CheckRevive(width,height,points);
     }
 
     public int getGrannar(Point[] points, Point point) {
@@ -49,10 +50,12 @@ public class Model {
         return grannar;
     }
 
-    public int getGranne(int width, int height, Point[] points) {
+    public Point[] CheckRevive(int width, int height, Point[] points) {
+        int spawning = 0;
         int grannar = 0;
         int x;
         int y;
+
 
         for (int i = 0; i<points.length; i++) {
             for (int p = 1; p < height; p++) {
@@ -65,11 +68,38 @@ public class Model {
                     x = o;
                 }
             }
-            System.out.println(i+1 + " has " + grannar + " grannar");
+            if (grannar == 3) {
+                spawning++;
+            }
             grannar = 0;
         }
-
-        return grannar;
+        Point[] ny = new Point[points.length+spawning];
+        int l = 0;
+        int pixel = 0;
+        for (int i = 0; i<points.length; i++) {
+            for (int p = 1; p < height; p++) {
+                y = p;
+                x = 1;
+                for (int o = 1; o < width; o++) {
+                    pixel++;
+                    if (x - points[i].getX() <= 1 && x - points[i].getX() >= -1 && y - points[i].getY() <= 1 && y - points[i].getY() >= -1) {
+                        grannar++;
+                    }
+                    x = o;
+                }
+                if (grannar == 3) {
+                    System.out.println(pixel + " has " + grannar + " grannar");
+                    ny[l] = new Point(x,y);
+                    l++;
+                }
+            }
+            pixel = 0;
+            grannar = 0;
+        }
+        for (int i = 0; i<points.length+spawning; i++) {
+            ny[i+spawning] = points[i];
+        }
+        return ny;
     }
 
     public Point[] getPoints() {
